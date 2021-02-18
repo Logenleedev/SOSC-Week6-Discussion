@@ -10,19 +10,6 @@ library(raster)
 library(dplyr)
 library(spData)
 ```
-```{r}
-seine
-```
-```{r}
-nz_centroid = st_centroid(nz)
-seine_centroid = st_centroid(seine)
-seine_centroid
-```
-```{r}
-seine_simp = st_simplify(seine, dTolerance = 2000)  
-seine_buff_5km = st_buffer(seine, dist = 5000)
-seine_buff_50km = st_buffer(seine, dist = 50000)
-```
 
 ```{r}
 tm_shape(seine_buff_5km)+
