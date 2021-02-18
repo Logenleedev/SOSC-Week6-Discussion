@@ -1,0 +1,63 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(sf)
+library(tmap)
+library(raster)
+library(dplyr)
+library(spData)
+```
+```{r}
+seine
+```
+```{r}
+nz_centroid = st_centroid(nz)
+seine_centroid = st_centroid(seine)
+seine_centroid
+```
+```{r}
+seine_simp = st_simplify(seine, dTolerance = 2000)  
+seine_buff_5km = st_buffer(seine, dist = 5000)
+seine_buff_50km = st_buffer(seine, dist = 50000)
+```
+
+```{r}
+tm_shape(seine_buff_5km)+
+  tm_borders()
+```
+```{r}
+CRS.new <- st_crs("EPSG:3435")
+```
+```{r}
+census_tract <- st_read("./Data/geo_export_a49a449c-f0b3-4a61-9f22-0ef8066c4244.shp")
+census_tract <- st_transform(census_tract ,CRS.new)
+census_tract
+```
+```{r}
+police_station <- read.csv("./Police_Stations_-_Map_3.csv")
+police_station
+```
+
+```{r}
+sp_police_station <- st_as_sf(police_station, coords = c("Long", "Lag"), crs = CRS.new) 
+
+sp_police_station
+```
+
+```{r}
+sp_police_station_buff_2mile = st_buffer(sp_police_station, 26400)
+dim(sp_police_station)
+# NYC_library_buff_50km = st_buffer(NYC_library, dist = 10000)
+```
+
+```{r}
+tmap_mode("plot")
+```
+
+```{r}
+tm_shape(census_tract) + tm_borders() +
+  tm_shape(sp_police_station) + tm_dots(col = "red") 
+```
